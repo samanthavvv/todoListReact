@@ -1,7 +1,6 @@
 import React from "react";
 
 import Create from "./create";
-import TodoService from "../service/todoService"
 import Todo from "./todo.js"
 import Filter from "./filter";
 
@@ -10,8 +9,7 @@ export default class TodoApp extends React.Component{
     constructor(props) {
         console.log("root constructor")
         super(props)
-        this.service = new TodoService()
-        this.state = { todo: this.service.todos.key, filter: "all" }
+        this.state = { todo:this.props.service.todos.key, filter: "all" }
     }
 
     //新增todo 处理
@@ -21,15 +19,15 @@ export default class TodoApp extends React.Component{
         // console.log(event.target);
         console.log(event.target.value);
 
-        this.service.create(event.target.value)    //获取用户输入数据，并存储
-        this.setState({ todo: this.service.todos.key }) //重新渲染
+        this.props.service.create(event.target.value)    //获取用户输入数据，并存储
+        this.setState({ todo: this.props.service.todos.key }) //重新渲染
     }
 
     //“是否已完成” 的勾选框处理
     handleCheckedChange(event, key) {
         console.log('~~~~~~~~~~~~~~~~~', event.target.checked)
-        this.setState({ todo: this.service.todos.key })
-        this.service.setTodoState(key, event.target.checked)
+        this.setState({ todo: this.props.service.todos.key })
+        this.props.service.setTodoState(key, event.target.checked)
     }
 
     // 过滤条件变化时的处理
@@ -50,7 +48,7 @@ export default class TodoApp extends React.Component{
                 <hr />
 
                 {/* 根据过滤条件显示todo */}
-                {[...this.service.todos.values()]
+                {[...this.props.service.todos.values()]
                     .filter(item => {
                         let fs = this.state.filter;
 
