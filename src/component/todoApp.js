@@ -16,7 +16,7 @@ export default class TodoApp extends React.Component{
 
     //新增todo 处理
     handleCreate(event) {
-        console.log("root handleCreate")
+        console.log("todoapp handleCreate")
         // console.log(this);
         // console.log(event.target);
         console.log(event.target.value);
@@ -27,15 +27,16 @@ export default class TodoApp extends React.Component{
 
     //“是否已完成” 的勾选框处理
     handleCheckedChange(event, key) {
-        console.log('~~~~~~~~~~~~~~~~~', event.target.checked)
+        console.log("todoapp handleCheckedChange", event.target.checked)
         // this.setState({ todo: this.props.service.todos })
         this.props.service.setTodoState(key, event.target.checked)
     }
 
     // 过滤条件变化时的处理
     handleCondChange(value) {
-        console.log(value)
-        this.setState({ filter: value })
+        console.log("todoapp handleCondChange", value)
+        // this.setState({ filter: value })
+        this.props.service.setFilterState(value)
     }
 
     render() {
@@ -44,20 +45,13 @@ export default class TodoApp extends React.Component{
                 {/* 创建todo */}
                 <Create onCreate={this.handleCreate.bind(this)} />
 
-                {/* 过滤是否完成 */}
+                {/* 过滤 */}
                 {<Filter onChange={this.handleCondChange.bind(this)} />}
 
                 <hr />
 
                 {/* 根据过滤条件显示todo */}
                 {[...this.props.service.todos.values()]
-                    .filter(item => {
-                        let fs = this.state.filter;
-
-                        if (fs === "all") { return true };
-                        if (fs === "completed") { return item.completed === true ? true : false };
-                        if (fs === "uncompleted") { return item.completed === false ? true : false };
-                    })
                     .map(item =>
                         <Todo onChange={this.handleCheckedChange.bind(this)}
                             checkboxkey={item.key}

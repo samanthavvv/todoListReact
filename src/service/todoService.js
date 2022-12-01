@@ -13,13 +13,22 @@ export default class TodoService {
 
     //localstorage 存储中key 的前缀,用作业务区分
     static NAMESAPCE = "todo::";
+    static COMPLETED = "uncompleted";
 
     //待办事项容器: {title, key, completed}
     @observable _todos = new Map(); //Mobx中的被观察者
+    // @observable _change = ?
+    @observable filter = TodoService.COMPLETED  
 
     // get 方法
     get todos(){
-        return this._todos
+        return [...this._todos.values()].filter(item => {
+            let fs = this.filter;
+            
+            if (fs === "all") { return true };
+            if (fs === "completed") { return item.completed === true ? true : false };
+            if (fs === "uncompleted") { return item.completed === false ? true : false };
+        })
     }
 
     //从localstorage  中加载数据到 todos中：初始化
@@ -64,6 +73,11 @@ export default class TodoService {
         this._todos = {}
         this._todos = temp
     };
+
+    setFilterState(value){
+        console.log("todo service setFilterState", value)
+        this.filter = value
+    }
 
 }
 
