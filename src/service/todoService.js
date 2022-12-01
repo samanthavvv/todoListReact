@@ -1,6 +1,5 @@
 import store from "store"
-import { observable } from "mobx";  //设置被观察者
-import { observer } from "mobx-react";
+import { observable,computed } from "mobx";  //设置被观察者
 
 /**
  * 类的作用是
@@ -21,7 +20,7 @@ export default class TodoService {
     @observable filter = TodoService.COMPLETED  
 
     // get 方法
-    get todos(){
+    @computed get todos(){    //getter
         return [...this._todos.values()].filter(item => {
             let fs = this.filter;
             
