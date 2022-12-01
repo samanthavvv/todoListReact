@@ -1,4 +1,6 @@
 import store from "store"
+import { observable } from "mobx";  //设置被观察者
+import { observer } from "mobx-react";
 
 /**
  * 类的作用是
@@ -13,7 +15,7 @@ export default class TodoService {
     static NAMESAPCE = "todo::";
 
     //待办事项容器: {title, key, completed}
-    _todos = new Map();
+    @observable _todos = new Map(); //Mobx中的被观察者
 
     // get 方法
     get todos(){
@@ -45,6 +47,10 @@ export default class TodoService {
         //持久化todo
         store.set(todo.key, todo)
 
+        let temp = this._todos
+        this._todos = {}
+        this._todos = temp
+
         return todo
     };
 
@@ -53,6 +59,10 @@ export default class TodoService {
         todo.completed = checked
         //同步
         store.set(key, todo)
+
+        let temp = this._todos
+        this._todos = {}
+        this._todos = temp
     };
 
 }

@@ -1,15 +1,17 @@
 import React from "react";
+import {observer} from "mobx-react"
 
 import Create from "./create";
 import Todo from "./todo.js"
 import Filter from "./filter";
 
-
+@observer
 export default class TodoApp extends React.Component{
     constructor(props) {
         console.log("root constructor")
         super(props)
-        this.state = { todo:this.props.service.todos.key, filter: "all" }
+        // this.state = { todo:this.props.service.todos, filter: "all" }
+        this.state = { filter: "all" }
     }
 
     //新增todo 处理
@@ -20,13 +22,13 @@ export default class TodoApp extends React.Component{
         console.log(event.target.value);
 
         this.props.service.create(event.target.value)    //获取用户输入数据，并存储
-        this.setState({ todo: this.props.service.todos.key }) //重新渲染
+        // this.setState({ todo: this.props.service.todos }) //重新渲染
     }
 
     //“是否已完成” 的勾选框处理
     handleCheckedChange(event, key) {
         console.log('~~~~~~~~~~~~~~~~~', event.target.checked)
-        this.setState({ todo: this.props.service.todos.key })
+        // this.setState({ todo: this.props.service.todos })
         this.props.service.setTodoState(key, event.target.checked)
     }
 
