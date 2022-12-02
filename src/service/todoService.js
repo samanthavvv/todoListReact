@@ -1,10 +1,16 @@
 import store from "store"
 import { observable,computed } from "mobx";  //设置被观察者
+import { symbol } from "prop-types";
 
 /**
  * 类的作用是
  * @params() value
  */
+
+const ALL = Symbol("all")
+const COMPLETED = Symbol("completed")
+const UNCOMPLETED = Symbol("uncompleted")
+
 export default class TodoService {
     constructor(){
         this.load()
@@ -12,21 +18,25 @@ export default class TodoService {
 
     //localstorage 存储中key 的前缀,用作业务区分
     static NAMESAPCE = "todo::";
-    static COMPLETED = "uncompleted";
+    static STATES = {
+        all: ALL,
+        completed:COMPLETED,
+        uncompleted:UNCOMPLETED
+    };
 
     //待办事项容器: {title, key, completed}
     @observable _todos = new Map(); //Mobx中的被观察者
     // @observable _change = ?
-    @observable filter = TodoService.COMPLETED  
+    @observable filter = TodoService.STATES.uncompleted  
 
     // get 方法
     @computed get todos(){    //getter
         return [...this._todos.values()].filter(item => {
             let fs = this.filter;
             
-            if (fs === "all") { return true };
-            if (fs === "completed") { return item.completed === true ? true : false };
-            if (fs === "uncompleted") { return item.completed === false ? true : false };
+            if (fs === TodoService.STATES.all) { return true };
+            if (fs === TodoService.STATES.completed) { return item.completed === true ? true : false };
+            if (fs === TodoService.STATES.uncompleted) { return item.completed === false ? true : false };
         })
     }
 
@@ -75,7 +85,7 @@ export default class TodoService {
 
     setFilterState(value){
         console.log("todo service setFilterState", value)
-        this.filter = value
+        this.filter = TodoService.STATES[value]
     }
 
 }
