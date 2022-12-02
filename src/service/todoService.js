@@ -1,16 +1,15 @@
 import store from "store"
 import { observable,computed } from "mobx";  //设置被观察者
-import { symbol } from "prop-types";
-
-/**
- * 类的作用是
- * @params() value
- */
+import axios from 'axios';
 
 const ALL = Symbol("all")
 const COMPLETED = Symbol("completed")
 const UNCOMPLETED = Symbol("uncompleted")
 
+/**
+ * 类的作用是
+ * @params() value
+ */
 export default class TodoService {
     constructor(){
         this.load()
@@ -50,7 +49,7 @@ export default class TodoService {
     };
 
     //创建新的待办事项：key 的唯一+可变性
-    create(title) {
+    cc(title) {
         console.log("create title")
 
         const todo = {
@@ -70,6 +69,24 @@ export default class TodoService {
         this._todos = temp
 
         return todo
+    };
+
+    create(title){
+        const todo = {
+            key: TodoService.NAMESAPCE + (new Date()).valueOf(),    //毫秒时间戳
+            title: title,
+            completed: false
+        };
+
+        // const [post, setPost] = React.useState(null);
+
+        axios.post('/api/todo', todo).then(function (response) {
+            setPost(response.data)
+            console.log(response);
+        }).catch(function (error) {
+        console.log(error);
+        });
+
     };
 
     setTodoState(key, checked){
