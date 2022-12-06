@@ -59,7 +59,7 @@ module.exports = {
         },
         proxy: {
             '/api': {
-                target: 'http://120.26.48.153:80',
+                target: 'http://120.26.48.153:80/api/todo',
                 changeOrigin: true
             }
         }
